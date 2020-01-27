@@ -1,5 +1,5 @@
 ---
-title: "homework1"
+title: "Tarea 1"
 author: "Pablo,Sofía,Román"
 date: "26/1/2020"
 output: pdf_document
@@ -7,24 +7,167 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+#raffle 
+date <- 26012020
+set.seed(date)
+pablo <- sample(1:4,size = 1)
+sofia <- sample(1:4,size = 1)
+roman <- sample(1:4,size = 1)
+
+#libraries 
+library(datasets)
+library(GGally)
+library(dplyr)
 ```
 
-## R Markdown
+# Ejercicio 3
+## Las flores de Fisher y Anderson
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+### 3a
+```{r}
+X <- iris3[,,1] #1 is for Setosa
+s_mn <- apply(X = X,MARGIN = 2,FUN = mean)
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+#corrected mean square 
+dim_set <- dim(X)[1]
+s_mn_matrix <- matrix(rep(s_mn,each = dim_set), nrow = dim_set)
+A <- X - s_mn_matrix
+# for(i in 1:4){
+#   A[,i] <- A[,i] * A[,i]
+# }
+A <- t(A) %*% A
+#unbaised sample covarianse
+Sx <- (1/(dim_set -1) * A)
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
+### 3b
+```{r}
+#eigenpar 
+eigen_list <- eigen(Sx)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+### 3c
+```{r}
+U <- eigen_list$vectors
+L <- diag(eigen_list$values)
+
+#compute Sx = ULU'
+Sx_prim = U %*% L %*% t(U)
+
+#compute UU' & U'U 
+UUt <- U %*% t(U)
+UtU <- t(U) %*% U
+```
+
+#3d
+```{r}
+matplot_setosa <- iris %>% 
+                  filter(Species == "setosa") %>%  
+                  select(Sepal.Length, Sepal.Width, Petal.Length) %>%
+                  ggpairs() +
+                  theme_bw() +
+                  labs(title = "SETOSA", x = "", y = "")
+
+matplot_veris <- iris %>% 
+                  filter(Species == "versicolor") %>%  
+                  select(Sepal.Length, Sepal.Width, Petal.Length) %>%
+                  ggpairs() + 
+                  theme_bw() +
+                  labs(title = "VERSICOLOR", x = "", y = "")
+
+matplot_virg <- iris %>% 
+                  filter(Species == "virginica") %>%  
+                  select(Sepal.Length, Sepal.Width, Petal.Length) %>%
+                  ggpairs() +
+                  theme_bw() +
+                  labs(title = "VIRGINICA", x = "", y = "")
+
+
+matplot_all <- iris %>% 
+                  ggscatmat(color = 'Species') + 
+                  theme_bw() + 
+                  labs(title = "FLORES", x = "", y = "", color = "Especie de\n flor")
+
+#we omitted this graph because it looked very heaped
+# matplot_all2 <- iris %>% 
+#                   ggpairs(mapping = aes(color = 'Species')) + 
+#                   theme_light() + 
+#                   labs(title = "Figura 1", x = "", y = "", color = "Especie de\n flor")
+
+
+matplot_setosa
+matplot_veris
+matplot_virg
+matplot_all
+
+```
+
+# Ejercicio 4
+## Flores de Fisher y Anderson parte II.
+
+### 4a
+
+Sabemos que $Y^{5} = X^{3} + X^{4}.$ Entonces, para encontar $C$ tal que 
+$$ Y = XC,$$
+se puede notar que $C$ debe ser de la forma
+
+\[
+C=
+\left[
+\begin{array}{c|c}
+I_{4,4} & 
+
+\begin{array}{c}
+0 \\ 0 \\ 1 \\ 1\end{array}
+
+
+\end{array}
+\right]
+\].
+
+
+```{r}
+Y <- cbind(X,(X[,'Petal L.'] + X[,'Petal W.']))
+colnames(Y) <- c('Sepal L.','Sepal W.','Petal L.', 'Petal W.', 'PL + PW')
+
+#C
+C <-  diag(x = 1, nrow = 4)
+C <-  cbind(C,c(0,0,1,1))
+
+#check if Y = XC
+testY <- Y == X %*% C
+
+```
+
+### 4b
+```{r}
+#covariance matrix
+dim_Y <- dim(Y)[1]
+Sy <- (1/(dim_Y -1)) * t(Y) %*% Y
+
+#eigenpair
+eigen_listY <- eigen(Sy)
+```
+
+### 4c
+```{r}
+testSy <- t(C) %*% Sx %*% C 
+```
+
+
+# Ejercicio 5
+## EDA de los Indicadores de la CNBV
+```{r}
+doc <- "DatosCNBVModificados.csv"
+data_cnbv <- read.csv(file = doc)
+```
+
+
+
+
+
+
