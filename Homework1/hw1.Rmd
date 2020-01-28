@@ -19,7 +19,131 @@ roman <- sample(1:4,size = 1)
 library(datasets)
 library(GGally)
 library(dplyr)
+library(ggplot2)
 ```
+
+# Ejercicio 2
+## 2a
+```{r}
+columns<-c("x1",
+           "x2",
+           "x3",
+           "x4",
+           "x5",
+           "x6")
+```
+
+```{r}
+data <- read.delim("T01_06.txt", header = FALSE, sep= "", col.names = columns)
+```
+
+```{r}
+data$x6<-as.factor(data$x6)
+```
+
+
+```{r}
+#Scatterplot X2 y X4 para multiescleriosis (x6=1)
+ggplot(subset(data, x6==1), aes(y=x2, x= x4, color=x6))+ xlab("la respuesta total de ambos ojos a estimulos S2")+ylab("la respuesta total de ambos ojos a estimulos S1") +geom_jitter(alpha=0.3)+theme_minimal()
+
+#Parace que existe una tendencia lineal creciente con respesto a la respuesta de ambos ojos a cada uno de los estímulos. Existen casos atípicos en los que las respuestas fueron "extremas".
+```
+## 2b
+
+```{r}
+#Resultados para el grupo sin MS (x6=0)
+x1_barra_0<-mean(subset(data$x1, data$x6==0),na.rm=TRUE)
+x2_barra_0<-mean(subset(data$x2, data$x6==0),na.rm=TRUE)
+x3_barra_0<-mean(subset(data$x3, data$x6==0),na.rm=TRUE)
+x4_barra_0<-mean(subset(data$x4, data$x6==0),na.rm=TRUE)
+x5_barra_0<-mean(subset(data$x5, data$x6==0),na.rm=TRUE)
+```
+
+```{r}
+#Resultados para el grupo con MS (x6=1)
+x1_barra_1<-mean(subset(data$x1, data$x6==1),na.rm=TRUE)
+x2_barra_1<-mean(subset(data$x2, data$x6==1),na.rm=TRUE)
+x3_barra_1<-mean(subset(data$x3, data$x6==1),na.rm=TRUE)
+x4_barra_1<-mean(subset(data$x4, data$x6==1),na.rm=TRUE)
+x5_barra_1<-mean(subset(data$x5, data$x6==1),na.rm=TRUE)
+```
+
+```{r}
+#Matriz de varianzas y covarianzas (S)
+#
+```
+
+## 2c
+
+
+```{r}
+#Scratterplot x1 y x2
+ggplot(data, aes(x=x1, y= x2, color=x6))+ xlab("edad")+ylab("la respuesta total de ambos ojos a estimulos S1") +geom_jitter(alpha=0.3)+theme_minimal()
+#Parece que existe una tendencia lineal creciente entre la edad y la respuesta de los ojos al primer estímulo si las personas no tienen SM; sin embargo, para las personas que padecen dicha enfermedad no tienen una respuesta a la prueba relacionada con su edad.
+```
+
+```{r}
+#Scratterplot x1 y x3
+ggplot(data, aes(x=x1, y= x3, color=x6))+ xlab("edad")+ylab("la diferencia entre respuestas de los ojos a estímulos S1") +geom_jitter(alpha=0.3)+theme_minimal()
+
+#El cambio en la diferencia entre respuesta de los ojos ante el estímulo S1 es casi nula al cambiar la ededad para embos grupos. Hay más variabilidad para el grupo con SM que para el resto. Las personas con SM parece que no tienen cambio alguno con el aumento de edad.
+```
+
+```{r}
+#Scratterplot x1 y x4
+ggplot(data, aes(x=x1, y= x4, color=x6))+ xlab("edad")+ylab("la respuesta total de ambos ojos a estimulos S2") +geom_jitter(alpha=0.3)+theme_minimal()
+
+#El segundo estímulo no tiene una tendencia clara para ninguno de los grupos y los grupos no se comportan de manera similar. Para los estudiados "enfermos" parece haber mucha más variabilidad.
+```
+
+```{r}
+#Scratterplot x1 y x5
+ggplot(data, aes(x=x1, y= x5, color=x6))+ xlab("edad")+ylab("la diferencia entre respuestas de los ojos a estímulos S2") +geom_jitter(alpha=0.3)+theme_minimal()
+ 
+#Al igual que en la gráfica anterior, se puede apreciar que las personas con escleriosis tienen un comportamiento muy distintos a sus contrapartes. Mientras las personas sin SM tienen cambios menos notorios en la diferencia de respuesta ante el S2 on respecto a la edad, los enfermos sí presentan variabilidad. Cada grupo sigue la tendencia presente entre la edad y la diferencia ante el estímulo S1.
+```
+
+```{r}
+#Scratterplot x2 y x3
+ggplot(data, aes(x=x2, y= x3, color=x6))+ xlab("la respuesta total de ambos ojos a estimulos S1")+ylab("la diferencia entre respuestas de los ojos a estímulos S1") +geom_jitter(alpha=0.3)+theme_minimal()
+
+#Las observaciones para las personas sin SM parecen tener una tendencia lineal con pendiente cero; es decir, no cambiar con la respuesta al estímulo S1. Para el grupo con SM no hay tendencias claras.
+```
+
+```{r}
+#Scratterplot x2 y x4
+ggplot(data, aes(x=x2, y= x4, color=x6))+ xlab("la respuesta total de ambos ojos a estimulos S1")+ylab("la respuesta total de ambos ojos a estimulos S2") +geom_jitter(alpha=0.3)+theme_minimal()
+
+#Se presenta, como esperado, una tendencia creciente entre las respueestas de ambos ojos ante los estímulos S1 y S2. Entre mejor respuesta con un estímulo, mayor será con el otro.
+```
+
+```{r}
+#Scratterplot x2 y x5
+ggplot(data, aes(x=x2, y= x5, color=x6))+ xlab("la respuesta total de ambos ojos a estimulos S1")+ylab("lla diferencia entre respuestas de los ojos a estímulos S2") +geom_jitter(alpha=0.3)+theme_minimal()
+
+#No hay tendencias a simple vista y no se esperaría que existiera una empíricamente.
+```
+
+```{r}
+#Scratterplot x3 y x4
+ggplot(data, aes(x=x3, y= x4, color=x6))+ xlab("la diferencia entre respuestas de los ojos a estímulos S1")+ylab("la respuesta total de ambos ojos a estimulos S2") +geom_jitter(alpha=0.3)+theme_minimal()
+
+#Ocurre lo mismo que apra x2 y x3, con los ejes rotados.
+```
+
+```{r}
+#Scratterplot x3 y x5
+ggplot(data, aes(x=x3, y= x5, color=x6))+ xlab("la diferencia entre respuestas de los ojos a estímulos S1")+ylab("la diferencia entre respuestas de los ojos a estímulos S2") +geom_jitter(alpha=0.3)+theme_minimal()
+#Claramente hay más variabilidad para el grupo de los pacientes con SM que con el resto, pero als tendencias no son claras.
+```
+
+```{r}
+#Scratterplot x4 y x5
+ggplot(data, aes(x=x4, y= x5, color=x6))+ xlab("la respuesta total de ambos ojos a estimulos S2")+ylab("la diferencia entre respuestas de los ojos a estímulos S2") +geom_jitter(alpha=0.3)+theme_minimal()
+
+#No se espera que haya una tendencia para estos datos y no ocurre cómo tal.
+```
+
 
 # Ejercicio 3
 ## Las flores de Fisher y Anderson
