@@ -114,20 +114,21 @@ matplot_all
 Sabemos que $Y^{5} = X^{3} + X^{4}.$ Entonces, para encontar $C$ tal que 
 $$ Y = XC,$$
 se puede notar que $C$ debe ser de la forma
-
-\[
-C=
-\left[
-\begin{array}{c|c}
-I_{4,4} & 
-
-\begin{array}{c}
-0 \\ 0 \\ 1 \\ 1\end{array}
-
-
-\end{array}
-\right]
-\].
+```{r}
+# \[
+# C=
+# \left[
+# \begin{array}{c|c}
+# I_{4,4} & 
+# 
+# \begin{array}{c}
+# 0 \\ 0 \\ 1 \\ 1\end{array}
+# 
+# 
+# \end{array}
+# \right]
+# \]
+```
 
 
 ```{r}
@@ -161,12 +162,58 @@ testSy <- t(C) %*% Sx %*% C
 
 # Ejercicio 5
 ## EDA de los Indicadores de la CNBV
+
+La CNBV publica indicadores financieros de manera mensual con el objetivo de de proporcionar estadísticas descriptivas para reflejar la evolución de la condición financiera de la Banca Múltiple.
 ```{r}
-doc <- "DatosCNBVModificados.csv"
-data_cnbv <- read.csv(file = doc)
+doc1 <- "DatosCNBVModificados1.csv"
+doc2 <- "DatosCNBVModificados2.csv"
+
+data_cnbv1 <- read.csv(file = doc1)
+data_cnbv2 <- read.csv(file = doc2)
 ```
 
 
+### Tipo de variables
+
+### Preguntas de investigación
+- Observar si existe una diferencia en el promedio del _monto_ y _flujo por mes_ en los distintos periodos.
+
+- Observar si existe una diferencia en el promedio del _monto_ y _flujo por mes_ en la Banca Múltiple.
+
+- ¿Existirá una tendencia en la distribución del _monto_ y _flujo por mes_ en la Banca Múltiple?
+
+- ¿Existe alguna relación entre  _monto_ y _flujo por mes_?
+
+- ¿Hubo cambios en el orden de  _montos_ y _flujos por mes_ en la Banca Múltiple?
+
+### Patrones relevantes
+```{r}
+# union of the two data to see duplicated data
+colnames(data_cnbv2) <- colnames(data_cnbv1)
+data_cnbv <- rbind(data_cnbv1,data_cnbv2)
+data_cnbv$Monto[data_cnbv$Monto == ""] <- NaN
+data_cnbv$Flujo_Mes[data_cnbv$Flujo_Mes == ""] <- NaN
+
+#duplicated data
+dupl_data <- duplicated(data_cnbv,incomparables = FALSE)
+dup_count <- sum(as.numeric(dupl_data)) 
+
+data_cnbv <- data_cnbv[-which(dupl_data),]
+
+#Number of NA's 
+na_data <- is.na(data_cnbv$Monto) | is.na(data_cnbv$Flujo_Mes)
+na_count <- sum(as.numeric(na_data)) 
+data_cnbv <- data_cnbv[-which(na_data),]
+```
+
+
+
+### Reportar aberraciones en los datos
+
+Primero que nada, se enfatiza que los datos en el archivo .csv publicado por la CNBV contiene datos reptidos, `r dup_count`, de igual manera contiene `r na_count`  datos faltantes, por lo que se optó por eliminar dichos datos. De igual manera (distribuciones)
+
+
+Es de observar que 
 
 
 
