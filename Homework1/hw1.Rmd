@@ -51,26 +51,24 @@ ggplot(subset(data, x6==1), aes(y=x2, x= x4, color=x6))+ xlab("la respuesta tota
 ## 2b
 
 ```{r}
-#Resultados para el grupo sin MS (x6=0)
-x1_barra_0<-mean(subset(data$x1, data$x6==0),na.rm=TRUE)
-x2_barra_0<-mean(subset(data$x2, data$x6==0),na.rm=TRUE)
-x3_barra_0<-mean(subset(data$x3, data$x6==0),na.rm=TRUE)
-x4_barra_0<-mean(subset(data$x4, data$x6==0),na.rm=TRUE)
-x5_barra_0<-mean(subset(data$x5, data$x6==0),na.rm=TRUE)
+#Convertimos el data frame en matriz
+data.matrix(data, rownames.force = NA)
 ```
 
 ```{r}
-#Resultados para el grupo con MS (x6=1)
-x1_barra_1<-mean(subset(data$x1, data$x6==1),na.rm=TRUE)
-x2_barra_1<-mean(subset(data$x2, data$x6==1),na.rm=TRUE)
-x3_barra_1<-mean(subset(data$x3, data$x6==1),na.rm=TRUE)
-x4_barra_1<-mean(subset(data$x4, data$x6==1),na.rm=TRUE)
-x5_barra_1<-mean(subset(data$x5, data$x6==1),na.rm=TRUE)
+#Resultados media para el grupo sin MS (x6=0)
+x_barra_0<-apply(subset(data2, data$x6==0),2,mean)
 ```
 
 ```{r}
-#Matriz de varianzas y covarianzas (S)
-#
+#Resultados media para el grupo con MS (x6=1)
+x_barra_0<-apply(subset(data2, data$x6==1),2,mean)
+```
+
+```{r}
+S<-var(data2) #Matriz de varianazas y covarianzas
+#cov(data2) Matriz de varianazas y covarianzas
+R<-cor(data2) #Matriz de correlaciones
 ```
 
 ## 2c
