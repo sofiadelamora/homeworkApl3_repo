@@ -21,6 +21,38 @@ library(GGally)
 library(dplyr)
 ```
 
+#Ejercicio 1
+
+```{r}
+  A <- matrix(c(7,5,3,2,1,8),ncol = 3)
+  B <- matrix(c(11,-7,8,12,0,9),ncol = 3)
+  #a) A'
+    t(A)
+  #b) A − B
+    A - B
+  #c) AB  
+    A*B
+  #d) A'A
+    t(A)%*%A
+  #e) AA'
+    A%*%t(A)
+  #f) A + B
+    A + B
+  #g) A'B
+    t(A)%*%B
+  #h) AB'
+    A%*%t(B)
+  #i) 17.3*A
+    17.3*A
+  #j) (1/19)*B
+    (1/19)*B
+
+```
+
+
+
+
+
 # Ejercicio 3
 ## Las flores de Fisher y Anderson
 
