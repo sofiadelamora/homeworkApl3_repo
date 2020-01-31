@@ -1,0 +1,463 @@
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provides euro and other symbols
+\else % if luatex or xelatex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Tarea 1},
+  pdfauthor={Pablo,Sofía,Román},
+  pdfborder={0 0 0},
+  breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-2}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\title{Tarea 1}
+\author{Pablo,Sofía,Román}
+\date{26/1/2020}
+
+\begin{document}
+\maketitle
+
+\#Ejercicio 1
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{  A <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{7}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{8}\NormalTok{),}\DataTypeTok{ncol =} \DecValTok{3}\NormalTok{)}
+\NormalTok{  B <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{11}\NormalTok{,}\OperatorTok{-}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{9}\NormalTok{),}\DataTypeTok{ncol =} \DecValTok{3}\NormalTok{)}
+  \CommentTok{#a) A'}
+    \KeywordTok{t}\NormalTok{(A)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2]
+## [1,]    7    5
+## [2,]    3    2
+## [3,]    1    8
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \CommentTok{#b) A − B}
+\NormalTok{    A }\OperatorTok{-}\StringTok{ }\NormalTok{B}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3]
+## [1,]   -4   -5    1
+## [2,]   12  -10   -1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \CommentTok{#c) AB  }
+\NormalTok{    A}\OperatorTok{*}\NormalTok{B}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3]
+## [1,]   77   24    0
+## [2,]  -35   24   72
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \CommentTok{#d) A'A}
+    \KeywordTok{t}\NormalTok{(A)}\OperatorTok{%*%}\NormalTok{A}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3]
+## [1,]   74   31   47
+## [2,]   31   13   19
+## [3,]   47   19   65
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \CommentTok{#e) AA'}
+\NormalTok{    A}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(A)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2]
+## [1,]   59   49
+## [2,]   49   93
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \CommentTok{#f) A + B}
+\NormalTok{    A }\OperatorTok{+}\StringTok{ }\NormalTok{B}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3]
+## [1,]   18   11    1
+## [2,]   -2   14   17
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \CommentTok{#g) A'B}
+    \KeywordTok{t}\NormalTok{(A)}\OperatorTok{%*%}\NormalTok{B}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3]
+## [1,]   42  116   45
+## [2,]   19   48   18
+## [3,]  -45  104   72
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \CommentTok{#h) AB'}
+\NormalTok{    A}\OperatorTok{%*%}\KeywordTok{t}\NormalTok{(B)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2]
+## [1,]  101   -4
+## [2,]   71   61
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \CommentTok{#i) 17.3*A}
+    \FloatTok{17.3}\OperatorTok{*}\NormalTok{A}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       [,1] [,2]  [,3]
+## [1,] 121.1 51.9  17.3
+## [2,]  86.5 34.6 138.4
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \CommentTok{#j) (1/19)*B}
+\NormalTok{    (}\DecValTok{1}\OperatorTok{/}\DecValTok{19}\NormalTok{)}\OperatorTok{*}\NormalTok{B}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            [,1]      [,2]      [,3]
+## [1,]  0.5789474 0.4210526 0.0000000
+## [2,] -0.3684211 0.6315789 0.4736842
+\end{verbatim}
+
+\hypertarget{ejercicio-3}{%
+\section{Ejercicio 3}\label{ejercicio-3}}
+
+\hypertarget{las-flores-de-fisher-y-anderson}{%
+\subsection{Las flores de Fisher y
+Anderson}\label{las-flores-de-fisher-y-anderson}}
+
+\hypertarget{a}{%
+\subsubsection{3a}\label{a}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X <-}\StringTok{ }\NormalTok{iris3[,,}\DecValTok{1}\NormalTok{] }\CommentTok{#1 is for Setosa}
+\NormalTok{s_mn <-}\StringTok{ }\KeywordTok{apply}\NormalTok{(}\DataTypeTok{X =}\NormalTok{ X,}\DataTypeTok{MARGIN =} \DecValTok{2}\NormalTok{,}\DataTypeTok{FUN =}\NormalTok{ mean)}
+
+\CommentTok{#corrected mean square }
+\NormalTok{dim_set <-}\StringTok{ }\KeywordTok{dim}\NormalTok{(X)[}\DecValTok{1}\NormalTok{]}
+\NormalTok{s_mn_matrix <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{rep}\NormalTok{(s_mn,}\DataTypeTok{each =}\NormalTok{ dim_set), }\DataTypeTok{nrow =}\NormalTok{ dim_set)}
+\NormalTok{A <-}\StringTok{ }\NormalTok{X }\OperatorTok{-}\StringTok{ }\NormalTok{s_mn_matrix}
+\CommentTok{# for(i in 1:4)\{}
+\CommentTok{#   A[,i] <- A[,i] * A[,i]}
+\CommentTok{# \}}
+\NormalTok{A <-}\StringTok{ }\KeywordTok{t}\NormalTok{(A) }\OperatorTok{%*%}\StringTok{ }\NormalTok{A}
+\CommentTok{#unbaised sample covarianse}
+\NormalTok{Sx <-}\StringTok{ }\NormalTok{(}\DecValTok{1}\OperatorTok{/}\NormalTok{(dim_set }\DecValTok{-1}\NormalTok{) }\OperatorTok{*}\StringTok{ }\NormalTok{A)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{b}{%
+\subsubsection{3b}\label{b}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#eigenpar }
+\NormalTok{eigen_list <-}\StringTok{ }\KeywordTok{eigen}\NormalTok{(Sx)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{c}{%
+\subsubsection{3c}\label{c}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{U <-}\StringTok{ }\NormalTok{eigen_list}\OperatorTok{$}\NormalTok{vectors}
+\NormalTok{L <-}\StringTok{ }\KeywordTok{diag}\NormalTok{(eigen_list}\OperatorTok{$}\NormalTok{values)}
+
+\CommentTok{#compute Sx = ULU'}
+\NormalTok{Sx_prim =}\StringTok{ }\NormalTok{U }\OperatorTok{%*%}\StringTok{ }\NormalTok{L }\OperatorTok{%*%}\StringTok{ }\KeywordTok{t}\NormalTok{(U)}
+
+\CommentTok{#compute UU' & U'U }
+\NormalTok{UUt <-}\StringTok{ }\NormalTok{U }\OperatorTok{%*%}\StringTok{ }\KeywordTok{t}\NormalTok{(U)}
+\NormalTok{UtU <-}\StringTok{ }\KeywordTok{t}\NormalTok{(U) }\OperatorTok{%*%}\StringTok{ }\NormalTok{U}
+\end{Highlighting}
+\end{Shaded}
+
+\#3d
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{matplot_setosa <-}\StringTok{ }\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }
+\StringTok{                  }\KeywordTok{filter}\NormalTok{(Species }\OperatorTok{==}\StringTok{ "setosa"}\NormalTok{) }\OperatorTok{%>%}\StringTok{  }
+\StringTok{                  }\KeywordTok{select}\NormalTok{(Sepal.Length, Sepal.Width, Petal.Length) }\OperatorTok{%>%}
+\StringTok{                  }\KeywordTok{ggpairs}\NormalTok{() }\OperatorTok{+}
+\StringTok{                  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
+\StringTok{                  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"SETOSA"}\NormalTok{, }\DataTypeTok{x =} \StringTok{""}\NormalTok{, }\DataTypeTok{y =} \StringTok{""}\NormalTok{)}
+
+\NormalTok{matplot_veris <-}\StringTok{ }\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }
+\StringTok{                  }\KeywordTok{filter}\NormalTok{(Species }\OperatorTok{==}\StringTok{ "versicolor"}\NormalTok{) }\OperatorTok{%>%}\StringTok{  }
+\StringTok{                  }\KeywordTok{select}\NormalTok{(Sepal.Length, Sepal.Width, Petal.Length) }\OperatorTok{%>%}
+\StringTok{                  }\KeywordTok{ggpairs}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{                  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
+\StringTok{                  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"VERSICOLOR"}\NormalTok{, }\DataTypeTok{x =} \StringTok{""}\NormalTok{, }\DataTypeTok{y =} \StringTok{""}\NormalTok{)}
+
+\NormalTok{matplot_virg <-}\StringTok{ }\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }
+\StringTok{                  }\KeywordTok{filter}\NormalTok{(Species }\OperatorTok{==}\StringTok{ "virginica"}\NormalTok{) }\OperatorTok{%>%}\StringTok{  }
+\StringTok{                  }\KeywordTok{select}\NormalTok{(Sepal.Length, Sepal.Width, Petal.Length) }\OperatorTok{%>%}
+\StringTok{                  }\KeywordTok{ggpairs}\NormalTok{() }\OperatorTok{+}
+\StringTok{                  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
+\StringTok{                  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"VIRGINICA"}\NormalTok{, }\DataTypeTok{x =} \StringTok{""}\NormalTok{, }\DataTypeTok{y =} \StringTok{""}\NormalTok{)}
+
+
+\NormalTok{matplot_all <-}\StringTok{ }\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }
+\StringTok{                  }\KeywordTok{ggscatmat}\NormalTok{(}\DataTypeTok{color =} \StringTok{'Species'}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{                  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{                  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"FLORES"}\NormalTok{, }\DataTypeTok{x =} \StringTok{""}\NormalTok{, }\DataTypeTok{y =} \StringTok{""}\NormalTok{, }\DataTypeTok{color =} \StringTok{"Especie de}\CharTok{\textbackslash{}n}\StringTok{ flor"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in ggscatmat(., color = "Species"): Factor variables are omitted in plot
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#we omitted this graph because it looked very heaped}
+\CommentTok{# matplot_all2 <- iris %>% }
+\CommentTok{#                   ggpairs(mapping = aes(color = 'Species')) + }
+\CommentTok{#                   theme_light() + }
+\CommentTok{#                   labs(title = "Figura 1", x = "", y = "", color = "Especie de\textbackslash{}n flor")}
+
+
+\NormalTok{matplot_setosa}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{hw1_files/figure-latex/unnamed-chunk-5-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{matplot_veris}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{hw1_files/figure-latex/unnamed-chunk-5-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{matplot_virg}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{hw1_files/figure-latex/unnamed-chunk-5-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{matplot_all}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{hw1_files/figure-latex/unnamed-chunk-5-4.pdf}
+
+\hypertarget{ejercicio-4}{%
+\section{Ejercicio 4}\label{ejercicio-4}}
+
+\hypertarget{flores-de-fisher-y-anderson-parte-ii.}{%
+\subsection{Flores de Fisher y Anderson parte
+II.}\label{flores-de-fisher-y-anderson-parte-ii.}}
+
+\hypertarget{a-1}{%
+\subsubsection{4a}\label{a-1}}
+
+Sabemos que \(Y^{5} = X^{3} + X^{4}.\) Entonces, para encontar \(C\) tal
+que \[ Y = XC,\] se puede notar que \(C\) debe ser de la forma
+
+{[} C= \left[
+\begin{array}{c|c}
+I_{4,4} & 
+
+\begin{array}{c}
+0 \\ 0 \\ 1 \\ 1\end{array}
+
+
+\end{array}
+\right]{]}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Y <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(X,(X[,}\StringTok{'Petal L.'}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{X[,}\StringTok{'Petal W.'}\NormalTok{]))}
+\KeywordTok{colnames}\NormalTok{(Y) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'Sepal L.'}\NormalTok{,}\StringTok{'Sepal W.'}\NormalTok{,}\StringTok{'Petal L.'}\NormalTok{, }\StringTok{'Petal W.'}\NormalTok{, }\StringTok{'PL + PW'}\NormalTok{)}
+
+\CommentTok{#C}
+\NormalTok{C <-}\StringTok{  }\KeywordTok{diag}\NormalTok{(}\DataTypeTok{x =} \DecValTok{1}\NormalTok{, }\DataTypeTok{nrow =} \DecValTok{4}\NormalTok{)}
+\NormalTok{C <-}\StringTok{  }\KeywordTok{cbind}\NormalTok{(C,}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+
+\CommentTok{#check if Y = XC}
+\NormalTok{testY <-}\StringTok{ }\NormalTok{Y }\OperatorTok{==}\StringTok{ }\NormalTok{X }\OperatorTok{%*%}\StringTok{ }\NormalTok{C}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{b-1}{%
+\subsubsection{4b}\label{b-1}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#covariance matrix}
+\NormalTok{dim_Y <-}\StringTok{ }\KeywordTok{dim}\NormalTok{(Y)[}\DecValTok{1}\NormalTok{]}
+\NormalTok{Sy <-}\StringTok{ }\NormalTok{(}\DecValTok{1}\OperatorTok{/}\NormalTok{(dim_Y }\DecValTok{-1}\NormalTok{)) }\OperatorTok{*}\StringTok{ }\KeywordTok{t}\NormalTok{(Y) }\OperatorTok{%*%}\StringTok{ }\NormalTok{Y}
+
+\CommentTok{#eigenpair}
+\NormalTok{eigen_listY <-}\StringTok{ }\KeywordTok{eigen}\NormalTok{(Sy)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{c-1}{%
+\subsubsection{4c}\label{c-1}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{testSy <-}\StringTok{ }\KeywordTok{t}\NormalTok{(C) }\OperatorTok{%*%}\StringTok{ }\NormalTok{Sx }\OperatorTok{%*%}\StringTok{ }\NormalTok{C }
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{ejercicio-5}{%
+\section{Ejercicio 5}\label{ejercicio-5}}
+
+\hypertarget{eda-de-los-indicadores-de-la-cnbv}{%
+\subsection{EDA de los Indicadores de la
+CNBV}\label{eda-de-los-indicadores-de-la-cnbv}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{doc <-}\StringTok{ "DatosCNBVModificados.csv"}
+\NormalTok{data_cnbv <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\DataTypeTok{file =}\NormalTok{ doc)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{document}
