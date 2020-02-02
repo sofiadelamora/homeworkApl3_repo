@@ -284,8 +284,111 @@ testSy <- t(C) %*% Sx %*% C
 # Ejercicio 5
 ## EDA de los Indicadores de la CNBV
 ```{r}
-doc <- "DatosCNBVModificados.csv"
-data_cnbv <- read.csv(file = doc)
+library(lattice)
+library(ggplot2)
+library(tidyverse)
+library(corrplot)
+library(GGally)
+library(gridExtra)
+ruta <- "Datos.csv"
+datos1 <- read.csv(ruta, header = T, nrows = 2269, encoding="UTF-8")
+datos2 <- read.csv(ruta, header = T, skip = 2270, encoding="UTF-8")
+```
+
+```{r}
+#Inciso a)
+clase_1 <- lapply(datos1, class)
+str(datos1)
+```
+
+```{r}
+#Inciso b)
+#       1) ¿Cuál es el monto promedio del mes?
+datos1$Monto <- as.numeric(as.character(datos1$Monto))
+monto_mean<-mean(datos1$Monto,na.rm = TRUE)
+monto_mean
+#       2)¿Cuál es el concepto que más se repite?
+datos1$Monto<-as.numeric(as.character(datos1$Monto))
+datos1$Flujo_Mes<-as.numeric(as.character(datos1$Flujo_Mes))
+getmode <- function(v) {
+   uniqv <- unique(v)
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+
+#En el primer data frame:
+concepto_1<-getmode(datos1$Concepto)
+#En el segundo data frame:
+concepto_2<- getmode(datos2$Concepto)
+
+concepto_1 #las modas son iguales para los dos DF
+
+#       3)¿Existe una relación entre el monto y el flujo del mes?
+correlacion<-cor(datos1$Monto,datos1$Flujo_Mes)
+correlacion
+
+```
+
+¿Hay valores nulos o faltantes?  
+```{r}
+datos1[datos1=="?"]<-NA
+summary(datos1)
+```
+
+```{r}
+datos2[datos2=="?"]<-NA
+summary(datos2)
+```
+
+```{r}
+data <- datos1 %>%  
+          select(-c(X.U.FEFF.cve_item,Textbox3,Flujo_Mes)) %>%
+          filter(cve_periodo == "201804") %>%
+          spread(Concepto, Monto) %>%
+          select(-cve_periodo)
+names(data) <- c("inst", "dep_pubgen","mdo_din","dep_plazo","dep_exi","tit_cred")
+bancos <- data$inst
+data <- as.data.frame(apply(data[,-1], 2,
+                             function(x) as.numeric(gsub(pattern = ",",
+                                                         replacement = "", x, fixed = TRUE))))
+row.names(data) <-bancos #separamos por cada Banco
+View(data)
+
+data <- data[,-3] # porque presenta colinealidad
+head(data)
+```
+
+```{r}
+sapply(datos1,class)
+x<-c("cve_periodo","Monto","Flujo_Mes")
+datos1[,x]<-lapply(datos1[,x], as.factor)
+summary(datos1)
+```
+
+```{r}
+datos1$Monto <- as.numeric(as.character(datos1$Monto))
+datos1$Flujo_Mes <- as.numeric(as.character(datos1$Flujo_Mes))
+ggscatmat(datos1, columns = 6:7, color = "Concepto", alpha = 0.5, corMethod = "pearson")
+```
+
+```{r}
+ggplot(datos1, aes(cve_periodo, Monto)) + geom_boxplot() + ylab("")
+```
+
+
+```{r}
+g_lm <- ggplot(datos1, mapping = aes(x = Monto, y = Flujo_Mes)) +
+          geom_point(mapping = aes(col = cve_periodo)) +
+          geom_smooth(method = "lm") +
+          theme_bw() +
+          labs(title = "Regresión General", x = "", y = "Flujo Mes") 
+g_sm <- ggplot(datos1, mapping = aes(x = Monto, y = Flujo_Mes, col = cve_periodo )) +
+          geom_point() +
+          geom_smooth() +
+          theme_bw() +
+          labs(title = "Regresión por periodo", x = "Monto", y = "Flujo Mes") 
+grid.arrange(g_lm,
+             g_sm,
+             ncol = 1)
 ```
 
 
