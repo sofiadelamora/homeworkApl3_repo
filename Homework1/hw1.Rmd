@@ -21,7 +21,131 @@ library(GGally)
 library(dplyr)
 library(gridExtra)
 library(knitr)
+library(ggplot2)
+library(lattice)
+library(ggplot2)
+library(tidyverse)
+library(corrplot)
 ```
+
+# Ejercicio 2
+## 2a
+```{r}
+columns<-c("x1",
+           "x2",
+           "x3",
+           "x4",
+           "x5",
+           "x6")
+```
+
+```{r}
+data <- read.delim("T01_06.txt", header = FALSE, sep= "", col.names = columns)
+```
+
+```{r}
+data$x6<-as.factor(data$x6)
+```
+
+
+```{r}
+#Scatterplot X2 y X4 para multiescleriosis (x6=1)
+ggplot(subset(data, x6==1), aes(y=x2, x= x4, color=x6))+ xlab("la respuesta total de ambos ojos a estimulos S2")+ylab("la respuesta total de ambos ojos a estimulos S1") +geom_jitter(alpha=0.3)+theme_minimal()
+
+#Parace que existe una tendencia lineal creciente con respesto a la respuesta de ambos ojos a cada uno de los estímulos. Existen casos atípicos en los que las respuestas fueron "extremas".
+```
+## 2b
+
+```{r}
+#Convertimos el data frame en matriz
+data.matrix(data, rownames.force = NA)
+```
+
+```{r}
+#Resultados media para el grupo sin MS (x6=0)
+x_barra_0<-apply(subset(data2, data$x6==0),2,mean)
+```
+
+```{r}
+#Resultados media para el grupo con MS (x6=1)
+x_barra_0<-apply(subset(data2, data$x6==1),2,mean)
+```
+
+```{r}
+S<-var(data2) #Matriz de varianazas y covarianzas
+#cov(data2) Matriz de varianazas y covarianzas
+R<-cor(data2) #Matriz de correlaciones
+```
+
+## 2c
+
+
+```{r}
+#Scratterplot x1 y x2
+ggplot(data, aes(x=x1, y= x2, color=x6))+ xlab("edad")+ylab("la respuesta total de ambos ojos a estimulos S1") +geom_jitter(alpha=0.3)+theme_minimal()
+#Parece que existe una tendencia lineal creciente entre la edad y la respuesta de los ojos al primer estímulo si las personas no tienen SM; sin embargo, para las personas que padecen dicha enfermedad no tienen una respuesta a la prueba relacionada con su edad.
+```
+
+```{r}
+#Scratterplot x1 y x3
+ggplot(data, aes(x=x1, y= x3, color=x6))+ xlab("edad")+ylab("la diferencia entre respuestas de los ojos a estímulos S1") +geom_jitter(alpha=0.3)+theme_minimal()
+
+#El cambio en la diferencia entre respuesta de los ojos ante el estímulo S1 es casi nula al cambiar la ededad para embos grupos. Hay más variabilidad para el grupo con SM que para el resto. Las personas con SM parece que no tienen cambio alguno con el aumento de edad.
+```
+
+```{r}
+#Scratterplot x1 y x4
+ggplot(data, aes(x=x1, y= x4, color=x6))+ xlab("edad")+ylab("la respuesta total de ambos ojos a estimulos S2") +geom_jitter(alpha=0.3)+theme_minimal()
+
+#El segundo estímulo no tiene una tendencia clara para ninguno de los grupos y los grupos no se comportan de manera similar. Para los estudiados "enfermos" parece haber mucha más variabilidad.
+```
+
+```{r}
+#Scratterplot x1 y x5
+ggplot(data, aes(x=x1, y= x5, color=x6))+ xlab("edad")+ylab("la diferencia entre respuestas de los ojos a estímulos S2") +geom_jitter(alpha=0.3)+theme_minimal()
+ 
+#Al igual que en la gráfica anterior, se puede apreciar que las personas con escleriosis tienen un comportamiento muy distintos a sus contrapartes. Mientras las personas sin SM tienen cambios menos notorios en la diferencia de respuesta ante el S2 on respecto a la edad, los enfermos sí presentan variabilidad. Cada grupo sigue la tendencia presente entre la edad y la diferencia ante el estímulo S1.
+```
+
+```{r}
+#Scratterplot x2 y x3
+ggplot(data, aes(x=x2, y= x3, color=x6))+ xlab("la respuesta total de ambos ojos a estimulos S1")+ylab("la diferencia entre respuestas de los ojos a estímulos S1") +geom_jitter(alpha=0.3)+theme_minimal()
+
+#Las observaciones para las personas sin SM parecen tener una tendencia lineal con pendiente cero; es decir, no cambiar con la respuesta al estímulo S1. Para el grupo con SM no hay tendencias claras.
+```
+
+```{r}
+#Scratterplot x2 y x4
+ggplot(data, aes(x=x2, y= x4, color=x6))+ xlab("la respuesta total de ambos ojos a estimulos S1")+ylab("la respuesta total de ambos ojos a estimulos S2") +geom_jitter(alpha=0.3)+theme_minimal()
+
+#Se presenta, como esperado, una tendencia creciente entre las respueestas de ambos ojos ante los estímulos S1 y S2. Entre mejor respuesta con un estímulo, mayor será con el otro.
+```
+
+```{r}
+#Scratterplot x2 y x5
+ggplot(data, aes(x=x2, y= x5, color=x6))+ xlab("la respuesta total de ambos ojos a estimulos S1")+ylab("lla diferencia entre respuestas de los ojos a estímulos S2") +geom_jitter(alpha=0.3)+theme_minimal()
+
+#No hay tendencias a simple vista y no se esperaría que existiera una empíricamente.
+```
+
+```{r}
+#Scratterplot x3 y x4
+ggplot(data, aes(x=x3, y= x4, color=x6))+ xlab("la diferencia entre respuestas de los ojos a estímulos S1")+ylab("la respuesta total de ambos ojos a estimulos S2") +geom_jitter(alpha=0.3)+theme_minimal()
+
+#Ocurre lo mismo que apra x2 y x3, con los ejes rotados.
+```
+
+```{r}
+#Scratterplot x3 y x5
+ggplot(data, aes(x=x3, y= x5, color=x6))+ xlab("la diferencia entre respuestas de los ojos a estímulos S1")+ylab("la diferencia entre respuestas de los ojos a estímulos S2") +geom_jitter(alpha=0.3)+theme_minimal()
+#Claramente hay más variabilidad para el grupo de los pacientes con SM que con el resto, pero als tendencias no son claras.
+```
+
+```{r}
+#Scratterplot x4 y x5
+ggplot(data, aes(x=x4, y= x5, color=x6))+ xlab("la respuesta total de ambos ojos a estimulos S2")+ylab("la diferencia entre respuestas de los ojos a estímulos S2") +geom_jitter(alpha=0.3)+theme_minimal()
+
+#No se espera que haya una tendencia para estos datos y no ocurre cómo tal.
 
 #Ejercicio 1
 
@@ -50,10 +174,6 @@ library(knitr)
     (1/19)*B
 
 ```
-
-
-
-
 
 # Ejercicio 3
 ## Las flores de Fisher y Anderson
@@ -321,6 +441,107 @@ data_cnbv2 <- read.csv(file = doc2)
 
 ## Patrones relevantes
 ```{r}
+
+ruta <- "Datos.csv"
+datos1 <- read.csv(ruta, header = T, nrows = 2269, encoding="UTF-8")
+datos2 <- read.csv(ruta, header = T, skip = 2270, encoding="UTF-8")
+```
+
+```{r}
+#Inciso a)
+clase_1 <- lapply(datos1, class)
+str(datos1)
+```
+
+```{r}
+#Inciso b)
+#       1) ¿Cuál es el monto promedio del mes?
+datos1$Monto <- as.numeric(as.character(datos1$Monto))
+monto_mean<-mean(datos1$Monto,na.rm = TRUE)
+monto_mean
+#       2)¿Cuál es el concepto que más se repite?
+datos1$Monto<-as.numeric(as.character(datos1$Monto))
+datos1$Flujo_Mes<-as.numeric(as.character(datos1$Flujo_Mes))
+getmode <- function(v) {
+   uniqv <- unique(v)
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+
+#En el primer data frame:
+concepto_1<-getmode(datos1$Concepto)
+#En el segundo data frame:
+concepto_2<- getmode(datos2$Concepto)
+
+concepto_1 #las modas son iguales para los dos DF
+
+#       3)¿Existe una relación entre el monto y el flujo del mes?
+correlacion<-cor(datos1$Monto,datos1$Flujo_Mes)
+correlacion
+
+```
+
+¿Hay valores nulos o faltantes?  
+```{r}
+datos1[datos1=="?"]<-NA
+summary(datos1)
+```
+
+```{r}
+datos2[datos2=="?"]<-NA
+summary(datos2)
+```
+
+```{r}
+data <- datos1 %>%  
+          select(-c(X.U.FEFF.cve_item,Textbox3,Flujo_Mes)) %>%
+          filter(cve_periodo == "201804") %>%
+          spread(Concepto, Monto) %>%
+          select(-cve_periodo)
+names(data) <- c("inst", "dep_pubgen","mdo_din","dep_plazo","dep_exi","tit_cred")
+bancos <- data$inst
+data <- as.data.frame(apply(data[,-1], 2,
+                             function(x) as.numeric(gsub(pattern = ",",
+                                                         replacement = "", x, fixed = TRUE))))
+row.names(data) <-bancos #separamos por cada Banco
+View(data)
+
+data <- data[,-3] # porque presenta colinealidad
+head(data)
+```
+
+```{r}
+sapply(datos1,class)
+x<-c("cve_periodo","Monto","Flujo_Mes")
+datos1[,x]<-lapply(datos1[,x], as.factor)
+summary(datos1)
+```
+
+```{r}
+datos1$Monto <- as.numeric(as.character(datos1$Monto))
+datos1$Flujo_Mes <- as.numeric(as.character(datos1$Flujo_Mes))
+ggscatmat(datos1, columns = 6:7, color = "Concepto", alpha = 0.5, corMethod = "pearson")
+```
+
+```{r}
+ggplot(datos1, aes(cve_periodo, Monto)) + geom_boxplot() + ylab("")
+```
+
+
+```{r}
+g_lm <- ggplot(datos1, mapping = aes(x = Monto, y = Flujo_Mes)) +
+          geom_point(mapping = aes(col = cve_periodo)) +
+          geom_smooth(method = "lm") +
+          theme_bw() +
+          labs(title = "Regresión General", x = "", y = "Flujo Mes") 
+g_sm <- ggplot(datos1, mapping = aes(x = Monto, y = Flujo_Mes, col = cve_periodo )) +
+          geom_point() +
+          geom_smooth() +
+          theme_bw() +
+          labs(title = "Regresión por periodo", x = "Monto", y = "Flujo Mes") 
+grid.arrange(g_lm,
+             g_sm,
+             ncol = 1)
+
 # union of the two data to see duplicated data
 colnames(data_cnbv2) <- colnames(data_cnbv1)
 data_cnbv <- rbind(data_cnbv1,data_cnbv2)
@@ -342,6 +563,7 @@ data_cnbv <- data_cnbv[-which(na_data),]
 data_cnbv$cve_periodo <- as.factor(data_cnbv$cve_periodo)
 data_cnbv$Monto <- as.numeric(data_cnbv$Monto)
 data_cnbv$Flujo_Mes <- as.numeric(data_cnbv$Flujo_Mes)
+
 ```
 
 ## Resumen de todas las variables
