@@ -19,7 +19,13 @@ roman <- sample(1:4,size = 1)
 library(datasets)
 library(GGally)
 library(dplyr)
+library(gridExtra)
+library(knitr)
 library(ggplot2)
+library(lattice)
+library(ggplot2)
+library(tidyverse)
+library(corrplot)
 ```
 
 # Ejercicio 2
@@ -140,13 +146,42 @@ ggplot(data, aes(x=x3, y= x5, color=x6))+ xlab("la diferencia entre respuestas d
 ggplot(data, aes(x=x4, y= x5, color=x6))+ xlab("la respuesta total de ambos ojos a estimulos S2")+ylab("la diferencia entre respuestas de los ojos a estímulos S2") +geom_jitter(alpha=0.3)+theme_minimal()
 
 #No se espera que haya una tendencia para estos datos y no ocurre cómo tal.
-```
 
+#Ejercicio 1
+
+```{r}
+  A <- matrix(c(7,5,3,2,1,8),ncol = 3)
+  B <- matrix(c(11,-7,8,12,0,9),ncol = 3)
+  #a) A'
+    t(A)
+  #b) A − B
+    A - B
+  #c) AB  
+    A*B
+  #d) A'A
+    t(A)%*%A
+  #e) AA'
+    A%*%t(A)
+  #f) A + B
+    A + B
+  #g) A'B
+    t(A)%*%B
+  #h) AB'
+    A%*%t(B)
+  #i) 17.3*A
+    17.3*A
+  #j) (1/19)*B
+    (1/19)*B
+
+```
 
 # Ejercicio 3
 ## Las flores de Fisher y Anderson
 
 ### 3a
+
+Se presenta a continuación la matrix de covarianza muestral insesgada $\textbf{S}_{X}$, de los datos para la Iris Setosa. 
+
 ```{r}
 X <- iris3[,,1] #1 is for Setosa
 s_mn <- apply(X = X,MARGIN = 2,FUN = mean)
@@ -155,64 +190,102 @@ s_mn <- apply(X = X,MARGIN = 2,FUN = mean)
 dim_set <- dim(X)[1]
 s_mn_matrix <- matrix(rep(s_mn,each = dim_set), nrow = dim_set)
 A <- X - s_mn_matrix
-# for(i in 1:4){
-#   A[,i] <- A[,i] * A[,i]
-# }
 A <- t(A) %*% A
+
 #unbaised sample covarianse
 Sx <- (1/(dim_set -1) * A)
+
+kable(A,"markdown")
 ```
 
 
+
 ### 3b
+
+Los eigenvalores y eigenvectores de  $\textbf{S}_{X}$ son:
+
 ```{r}
 #eigenpar 
 eigen_list <- eigen(Sx)
+kable(eigen_list$values, col.names = "Eigenvalores")
 
+```
+
+```{r}
+kable(eigen_list$vectors, "markdown", col.names = c("v1","v2","v3","v4"), label = "Eigenvectores")
 ```
 
 
 ### 3c
+
+Mostraremos que: 
+
+- $ULU^{T} = S_{X}$
+
+- $U^{T}U = UU^{T} = I_{4 \times 4}$
+
+Checamos entrada por entrada si el error relativo $\varepsilon = \frac{\left\| A - \tilde{A}|\right|_{\infty}}{ \left\|\tilde{A}|\right|_{\infty}}$es menor a cierta tolerancia. Fijemos la tolerancia numérica de $\text{tol} = e^{-8}$ para la norma del supremo de la matriz a comparar. 
 ```{r}
 U <- eigen_list$vectors
 L <- diag(eigen_list$values)
 
 #compute Sx = ULU'
 Sx_prim = U %*% L %*% t(U)
+testSx <- norm(Sx_prim - Sx,"I") / norm(Sx,"I")
 
+```
+
+Observamos que el error relativo $\varepsilon_{1} =$ $`r testSx`$ es menor que la tolerancia, por tanto se cumple la igualdad numéricamente.
+
+
+```{r}
 #compute UU' & U'U 
 UUt <- U %*% t(U)
 UtU <- t(U) %*% U
+
+test_uut <- norm(UUt - diag(1,nrow = 4),"I") / norm(UUt,"I")
+test_utu <- norm(UtU - diag(1,nrow = 4),"I") / norm(UtU,"I")
+
 ```
 
-#3d
+También podemos ver que el error relativo $\varepsilon_{2} =$ $`r test_uut`$ y el error relativo $\varepsilon_{2} =$ $`r test_utu`$  es menor que la tolerancia, por tanto se cumple la igualdad numéricamente para ambos casos.
+
+### 3d
+
+Se mostrará un cuatro gráficas de dispersión. Una para cada categoría de Iris y la última es una gráfica conjunta. Esto con el mootivo de estudiar por separado y con mayor legibilidad las gráficas por cada tipo y la última con el fin de comparar la distribución para cada especie de flor.
+
 ```{r}
 matplot_setosa <- iris %>% 
                   filter(Species == "setosa") %>%  
                   select(Sepal.Length, Sepal.Width, Petal.Length) %>%
                   ggpairs() +
                   theme_bw() +
-                  labs(title = "SETOSA", x = "", y = "")
+                  labs(title = "SETOSA", x = "", y = "") +
+                  theme(plot.margin = margin(1,.3,1,.3,"cm"))
 
 matplot_veris <- iris %>% 
                   filter(Species == "versicolor") %>%  
                   select(Sepal.Length, Sepal.Width, Petal.Length) %>%
                   ggpairs() + 
                   theme_bw() +
-                  labs(title = "VERSICOLOR", x = "", y = "")
+                  labs(title = "VERSICOLOR", x = "", y = "") +
+                  theme(plot.margin = margin(1,.3,1,.3,"cm"))
 
 matplot_virg <- iris %>% 
                   filter(Species == "virginica") %>%  
                   select(Sepal.Length, Sepal.Width, Petal.Length) %>%
                   ggpairs() +
                   theme_bw() +
-                  labs(title = "VIRGINICA", x = "", y = "")
+                  labs(title = "VIRGINICA", x = "", y = "") +
+                  theme(plot.margin = margin(1,.3,1,.3,"cm"))
+          
 
 
 matplot_all <- iris %>% 
                   ggscatmat(color = 'Species') + 
                   theme_bw() + 
-                  labs(title = "FLORES", x = "", y = "", color = "Especie de\n flor")
+                  labs(title = "FLORES", x = "", y = "", color = "Especie de\n flor") +
+                  theme(plot.margin = margin(1.1,.35,1.1,.35,"cm"))
 
 #we omitted this graph because it looked very heaped
 # matplot_all2 <- iris %>% 
@@ -228,6 +301,9 @@ matplot_all
 
 ```
 
+Se observa que hay una relación lineal positiva entre el largo y ancho del petalo, como el largo y el ancho del sépalo. Hay correlaciones positivas para estos casos, donde las corelaciones muestrales mayores se presentan en la especie virgínica.
+
+
 # Ejercicio 4
 ## Flores de Fisher y Anderson parte II.
 
@@ -236,20 +312,22 @@ matplot_all
 Sabemos que $Y^{5} = X^{3} + X^{4}.$ Entonces, para encontar $C$ tal que 
 $$ Y = XC,$$
 se puede notar que $C$ debe ser de la forma
+```{r}
+# \[
+# C=
+# \left[
+# \begin{array}{c|c}
+# I_{4,4} & 
+# 
+# \begin{array}{c}
+# 0 \\ 0 \\ 1 \\ 1\end{array}
+# 
+# 
+# \end{array}
+# \right]
+# \]
+```
 
-\[
-C=
-\left[
-\begin{array}{c|c}
-I_{4,4} & 
-
-\begin{array}{c}
-0 \\ 0 \\ 1 \\ 1\end{array}
-
-
-\end{array}
-\right]
-\].
 
 
 ```{r}
@@ -261,35 +339,109 @@ C <-  diag(x = 1, nrow = 4)
 C <-  cbind(C,c(0,0,1,1))
 
 #check if Y = XC
-testY <- Y == X %*% C
+testY <- norm(Y - X %*% C,"I")/norm(X %*% C,"I")
+
 
 ```
 
-### 4b
-```{r}
-#covariance matrix
-dim_Y <- dim(Y)[1]
-Sy <- (1/(dim_Y -1)) * t(Y) %*% Y
 
+Es de notar que el error relativo $\varepsilon_{4} =$ $`r testY`$ es menor que la tolerancia, por tanto $Y = XC$, numéricamente.
+
+
+### 4b
+
+La matriz de covarianzas corregidas esta dada por
+
+```{r}
+# X <- iris3[,,1] #1 is for Setosa
+# s_mn <- apply(X = X,MARGIN = 2,FUN = mean)
+# #corrected mean square 
+# dim_set <- dim(X)[1]
+# s_mn_matrix <- matrix(rep(s_mn,each = dim_set), nrow = dim_set)
+# A <- X - s_mn_matrix
+# # for(i in 1:4){
+# #   A[,i] <- A[,i] * A[,i]
+# # }
+# A <- t(A) %*% A
+# #unbaised sample covarianse
+# Sx <- (1/(dim_set -1) * A)
+# 
+# kable(A,"markdown")
+
+#covariance matrix of Y
+
+#mean of columns and dim
+s_mnY <- apply(X = Y, MARGIN = 2, FUN = mean)
+dim_Y <- dim(Y)[1]
+s_mn_matrixY <- matrix(rep(s_mnY,each = dim_Y), nrow = dim_Y)
+
+
+#corrected mean squear 
+B <- Y - s_mn_matrixY
+Sy <- (1/(dim_Y -1)) * t(B) %*% B
+
+kable(Sy)
+```
+.
+
+Los eigenpares de la matriz $S_{Y}$ están dados por
+
+```{r}
 #eigenpair
 eigen_listY <- eigen(Sy)
+
+kable(eigen_listY$values, col.names = "Eigenvalores")
+```
+
+
+```{r}
+kable(eigen_listY$vectors, "markdown", col.names = c("v1","v2","v3","v4","v5"), label = "Eigenvectores")
+
 ```
 
 ### 4c
+
+Igualmente mostraremos numéricamente que $S_{Y} = C^{T}S_{X}C$ con la norma del supremo.
 ```{r}
-testSy <- t(C) %*% Sx %*% C 
+#compare relative error
+tol <- exp(-8)
+testSy <- (norm(t(C) %*% Sx %*% C - Sy, "I")) / (norm(t(C) %*% Sx %*% C,"I"))
+
+
 ```
+
+Es de notar que el error relativo $\varepsilon_{5} =$ $`r testSy`$ es menor que la tolerancia, entonces se cumple la igualdad.
 
 
 # Ejercicio 5
 ## EDA de los Indicadores de la CNBV
+
+La CNBV publica indicadores financieros de manera mensual con el objetivo de de proporcionar estadísticas descriptivas para reflejar la evolución de la condición financiera de la Banca Múltiple.
 ```{r}
-library(lattice)
-library(ggplot2)
-library(tidyverse)
-library(corrplot)
-library(GGally)
-library(gridExtra)
+doc1 <- "DatosCNBVModificados1.csv"
+doc2 <- "DatosCNBVModificados2.csv"
+
+data_cnbv1 <- read.csv(file = doc1)
+data_cnbv2 <- read.csv(file = doc2)
+```
+
+
+### Tipo de variables
+
+### Preguntas de investigación
+- Observar si existe una diferencia en el promedio del _monto_ y _flujo por mes_ en los distintos periodos.
+
+- Observar si existe una diferencia en el promedio del _monto_ y _flujo por mes_ en la Banca Múltiple.
+
+- ¿Existirá una tendencia en la distribución del _monto_ y _flujo por mes_ en la Banca Múltiple?
+
+- ¿Existe alguna relación entre  _monto_ y _flujo por mes_?
+
+- ¿Hubo cambios en el orden de  _montos_ y _flujos por mes_ en la Banca Múltiple?
+
+## Patrones relevantes
+```{r}
+
 ruta <- "Datos.csv"
 datos1 <- read.csv(ruta, header = T, nrows = 2269, encoding="UTF-8")
 datos2 <- read.csv(ruta, header = T, skip = 2270, encoding="UTF-8")
@@ -389,10 +541,163 @@ g_sm <- ggplot(datos1, mapping = aes(x = Monto, y = Flujo_Mes, col = cve_periodo
 grid.arrange(g_lm,
              g_sm,
              ncol = 1)
+
+# union of the two data to see duplicated data
+colnames(data_cnbv2) <- colnames(data_cnbv1)
+data_cnbv <- rbind(data_cnbv1,data_cnbv2)
+data_cnbv$Monto[data_cnbv$Monto == ""] <- NaN
+data_cnbv$Flujo_Mes[data_cnbv$Flujo_Mes == ""] <- NaN
+
+#duplicated data
+dupl_data <- duplicated(data_cnbv,incomparables = FALSE)
+dup_count <- sum(as.numeric(dupl_data)) 
+
+data_cnbv <- data_cnbv[-which(dupl_data),]
+
+#number of NA's 
+na_data <- is.na(data_cnbv$Monto) | is.na(data_cnbv$Flujo_Mes)
+na_count <- sum(as.numeric(na_data)) 
+data_cnbv <- data_cnbv[-which(na_data),]
+
+#cast factor variables to numeric variables
+data_cnbv$cve_periodo <- as.factor(data_cnbv$cve_periodo)
+data_cnbv$Monto <- as.numeric(data_cnbv$Monto)
+data_cnbv$Flujo_Mes <- as.numeric(data_cnbv$Flujo_Mes)
+
+```
+
+## Resumen de todas las variables
+```{r}
+# general summary
+summary(data_cnbv)
+
+```
+
+## Flujo por mes & monto.
+```{r}
+#matrix plot
+mat_plt_all <- data_cnbv %>% 
+              ggscatmat(color = 'cve_periodo') +
+              theme_bw() +
+              labs(title = "Datos CNBV", x = "", y = "", color = "Periodo") +
+              theme(plot.margin = margin(1.1,.35,1.1,.35,"cm"))
+
+mat_plt_all
+
+#boxplot
+gbox_cnbv <- ggplot(data_cnbv, mapping = aes(x = cve_periodo, y = Monto, fill = cve_periodo)) + geom_boxplot() 
+
+gbox_cnbv
+
+```
+
+# Tendencia entre Flujo del mes y el monto.
+
+```{r}
+
+g_lm <- ggplot(data_cnbv, mapping = aes(x = Monto, y = Flujo_Mes)) +
+          geom_point(mapping = aes(col = cve_periodo)) +
+          geom_smooth(method = "lm") +
+          theme_bw() +
+          labs(title = "Regresión General", x = "", y = "Flujo Mes") 
+
+g_sm <- ggplot(data_cnbv, mapping = aes(x = Monto, y = Flujo_Mes, col = cve_periodo )) +
+          geom_point() +
+          geom_smooth() +
+          theme_bw() +
+          labs(title = "Regresión por periodo", x = "Monto", y = "Flujo Mes") 
+
+grid.arrange(g_lm,
+             g_sm,
+             ncol = 1)
+
+
+
+ruta <- "DatosCNBVIndicadores.csv"
+datos1 <- read.csv(ruta,header = T, nrows = 2269, encoding="UTF-8")
+datos2 <- read.csv(ruta, header = T, skip = 2270, encoding="UTF-8") 
+
+#Inciso a)
+clase <- lapply(datos2, class)
+str(datos2)
+head(datos2)
+
+
+#Inciso b)
+#       1) 
+#       2)
+#       3)
+
+```
+
+Se observa que existe una relación lineal entre el monto y el flujo por mes, sin embargo, las categorías no muestran esa relación lineal y fluctua dependiendo del nivel del monto.
+
+
+### Reportar aberraciones en los datos
+
+Primero que nada, se enfatiza que los datos en el archivo .csv publicado por la CNBV contiene  `r dup_count` datos reptidos, de igual manera contiene `r na_count`  datos faltantes, por lo que se optó por eliminar dichos datos. De igual manera (distribuciones)
+
+
+Es de observar que 
+
+```{r}
+datos <- datos2 %>%  
+          select(-c(Textbox4,cve_item2,Flujo_Mes1)) %>%
+          filter(cve_periodo2 == "201805") %>%
+          spread(Concepto1, item_Importe2) %>%
+          select(-cve_periodo2)
+
+names(datos) <- c("inst", "dep_pubgen","mdo_din","dep_plazo","dep_exi","tit_cred")
+bancos <- datos$inst
+datos <- as.data.frame(apply(datos[,-1], 2, 
+                             function(x) as.numeric(gsub(pattern = ",", 
+                                                         replacement = "", x, fixed = TRUE))))
+row.names(datos) <-bancos #por conveniencia separamos los nombres de los bancos de los datos.
+View(datos)
+datos <- datos[,-3] # porque presenta colinealidad
+head(datos)
+
+```
+```{r}
+l <- c(grep("Consolidado",bancos),grep("G-7",bancos),grep("Servicios",bancos),
+       grep("Comercial",bancos),grep("Total Banca",bancos),grep("Créditos a los Hogares",bancos),
+       grep("Bicentenario",bancos),grep("Deuno",bancos),grep("Wal-Mart",bancos),
+       grep("ING",bancos),grep("Ixe",bancos),grep("Wal-Mart",bancos),grep("GE Money",bancos),
+       grep("New York Mellon",bancos), grep("UBS",bancos))
+BD <- datos[-l,]
+BD
+summary(BD)
+BD <- log(BD + 1)
 ```
 
 
+```{r}
+summary(BD)
+par(mfrow=c(2,2))
+for(i in 1:4){
+  hist(BD[,i], xlab = colnames(BD)[i], ylab = "frecuencia", main = "", breaks = 20)
+}
+```
 
+```{r}
+pairs(BD)
+n <- dim(BD)[1]
+xbar <-apply(BD,2,mean,na.rm=T)
+xbar
+S <- var(BD, na.rm = T)
+S
+R <- cor(BD,use="pairwise")
+R
+corrplot.mixed(corr = R, upper = "ellipse")
+```
+```{r}
+radio <- sqrt(BD$dep_exi/ pi ) #escalado a área correcta de acuerdo a los depósitos de exigibilidad
+with(BD, symbols(dep_pubgen,mdo_din,circles=radio, inches = 0.25, fg="white", bg="red"))
+with(BD, points(dep_pubgen, mdo_din, type = "p", cex = 0.3))
+with(BD, text(dep_pubgen, mdo_din, row.names(bancos), cex=0.5, offset = 0.01, adj = 0.05))
+```
 
-
+```{r}
+stars(BD,key.loc=c(-0.7,17))
+```
 
