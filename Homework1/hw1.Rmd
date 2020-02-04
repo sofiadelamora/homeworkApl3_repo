@@ -21,6 +21,38 @@ library(GGally)
 library(dplyr)
 ```
 
+#Ejercicio 1
+
+```{r}
+  A <- matrix(c(7,5,3,2,1,8),ncol = 3)
+  B <- matrix(c(11,-7,8,12,0,9),ncol = 3)
+  #a) A'
+    t(A)
+  #b) A − B
+    A - B
+  #c) AB  
+    A*B
+  #d) A'A
+    t(A)%*%A
+  #e) AA'
+    A%*%t(A)
+  #f) A + B
+    A + B
+  #g) A'B
+    t(A)%*%B
+  #h) AB'
+    A%*%t(B)
+  #i) 17.3*A
+    17.3*A
+  #j) (1/19)*B
+    (1/19)*B
+
+```
+
+
+
+
+
 # Ejercicio 3
 ## Las flores de Fisher y Anderson
 
@@ -162,12 +194,86 @@ testSy <- t(C) %*% Sx %*% C
 # Ejercicio 5
 ## EDA de los Indicadores de la CNBV
 ```{r}
-doc <- "DatosCNBVModificados.csv"
-data_cnbv <- read.csv(file = doc)
+library(lattice)
+library(ggplot2)
+library(tidyverse)
+library(corrplot)
+ruta <- "DatosCNBVIndicadores.csv"
+datos1 <- read.csv(ruta,header = T, nrows = 2269, encoding="UTF-8")
+datos2 <- read.csv(ruta, header = T, skip = 2270, encoding="UTF-8") 
+
+#Inciso a)
+clase <- lapply(datos2, class)
+str(datos2)
+head(datos2)
+
+
+#Inciso b)
+#       1) 
+#       2)
+#       3)
 ```
 
 
 
+```{r}
+datos <- datos2 %>%  
+          select(-c(Textbox4,cve_item2,Flujo_Mes1)) %>%
+          filter(cve_periodo2 == "201805") %>%
+          spread(Concepto1, item_Importe2) %>%
+          select(-cve_periodo2)
+
+names(datos) <- c("inst", "dep_pubgen","mdo_din","dep_plazo","dep_exi","tit_cred")
+bancos <- datos$inst
+datos <- as.data.frame(apply(datos[,-1], 2, 
+                             function(x) as.numeric(gsub(pattern = ",", 
+                                                         replacement = "", x, fixed = TRUE))))
+row.names(datos) <-bancos #por conveniencia separamos los nombres de los bancos de los datos.
+View(datos)
+datos <- datos[,-3] # porque presenta colinealidad
+head(datos)
+
+```
+```{r}
+l <- c(grep("Consolidado",bancos),grep("G-7",bancos),grep("Servicios",bancos),
+       grep("Comercial",bancos),grep("Total Banca",bancos),grep("Créditos a los Hogares",bancos),
+       grep("Bicentenario",bancos),grep("Deuno",bancos),grep("Wal-Mart",bancos),
+       grep("ING",bancos),grep("Ixe",bancos),grep("Wal-Mart",bancos),grep("GE Money",bancos),
+       grep("New York Mellon",bancos), grep("UBS",bancos))
+BD <- datos[-l,]
+BD
+summary(BD)
+BD <- log(BD + 1)
+```
 
 
+```{r}
+summary(BD)
+par(mfrow=c(2,2))
+for(i in 1:4){
+  hist(BD[,i], xlab = colnames(BD)[i], ylab = "frecuencia", main = "", breaks = 20)
+}
+```
+
+```{r}
+pairs(BD)
+n <- dim(BD)[1]
+xbar <-apply(BD,2,mean,na.rm=T)
+xbar
+S <- var(BD, na.rm = T)
+S
+R <- cor(BD,use="pairwise")
+R
+corrplot.mixed(corr = R, upper = "ellipse")
+```
+```{r}
+radio <- sqrt(BD$dep_exi/ pi ) #escalado a área correcta de acuerdo a los depósitos de exigibilidad
+with(BD, symbols(dep_pubgen,mdo_din,circles=radio, inches = 0.25, fg="white", bg="red"))
+with(BD, points(dep_pubgen, mdo_din, type = "p", cex = 0.3))
+with(BD, text(dep_pubgen, mdo_din, row.names(bancos), cex=0.5, offset = 0.01, adj = 0.05))
+```
+
+```{r}
+stars(BD,key.loc=c(-0.7,17))
+```
 
