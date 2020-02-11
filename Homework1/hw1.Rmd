@@ -48,7 +48,7 @@ data$x6<-as.factor(data$x6)
 ```
 
 
-```{r}
+```{r}s
 #Scatterplot X2 y X4 para multiescleriosis (x6=1)
 ggplot(subset(data, x6==1), aes(y=x2, x= x4, color=x6))+ xlab("la respuesta total de ambos ojos a estimulos S2")+ylab("la respuesta total de ambos ojos a estimulos S1") +geom_jitter(alpha=0.3)+theme_minimal()
 
