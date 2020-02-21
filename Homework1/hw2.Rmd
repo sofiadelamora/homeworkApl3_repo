@@ -1,0 +1,127 @@
+---
+title: "APL3 T2" 
+output: html_notebook
+---
+##Ejercicio 1
+
+Un outlier se define como una observación que cae más allá de las barras del boxplot, las
+barras o whiskers se definen como: $F_U + 1.5dF$ y $F_L −1.5dF$ , donde $F_L$ y $F_U$ los quartiles 1 y 3
+respectivamente y dF es el rango intercuartil. El extremo suerior es el máximo del conjunto
+de datos. Responder las siguientes preguntas:
+
+Recordemos que un valor que caiga 1.5 rangos intercuantiles abajo o arriba del quantil superior/inferior es un outlier.
+
+a)¿Es el extremo superior siempre un outlier?
+
+Por definición, el extemo superior es el dato mayor exluyendo a los outliers, es decir, no puede ser uno de ellos.
+
+b) ¿Es posible para la media o la mediana quedar afuera de los cuartiles o incluso afuera
+de los whiskers?
+
+Le mediana es la linea que divide la caja a la mitad, por lo que, nunca quedará afuera de los cuantiles, es uno como tal y menos podr�?a estar fuera de los whiskers.Además, los whiskers representan una desviación estándar arriba y abajo de la media, entonces, tampoco puede estar fuera la media.
+
+c) Supongan que los datos se distribuyen $N(0, 1)$. ¿Qué porcentaje de los datos esperan
+que caigan afuera de los whiskers?
+
+Al observar la tabla z, podemos buscar el percentil 25 y el percentil 75, que son aproximadamente -0.675 y 0.675. Entonces, podemos obtener el l�?mite inferior y el l�?mite superior para el rango intercuantil $25 - 1.5 * (75 - 25)$ y $75 + 1.5 * (75 - 25)$, que es (-2.7,2.7).Entonces, tenemos 0.0035 de probabilidad a la izquierda (<-2.7) y 0.0035 de probabilidad a la derecha (> -2.7), entonces un total de 0.007 (0.7%) de probabilidad de estar fuera de os whiskers y ser outlier por lo tanto.
+
+d) ¿Qué porcentaje de los datos se espera que caigan fuera de los whiskers si suponemos
+que los datos son normales con media 0 y varianza $\sigma^2$ desconocida?
+
+Siguiendo el razonamiento anterior tenemos que el rango "aceptable" es $(-2.7\sigma,2.7\sigma)$. Lo cual coincide con .355 de probabilidad de caer en cada lado, por lo que, también tenemos un .7% de probabilidad de outliers.
+
+##Ejercicio 9
+a) Para el vector de medias sabemos que el vector de medias de una matriz $X$ está dado por $\bar{x}$=
+$\begin{bmatrix} \bar{x_1}\\ \bar{x_2}\end{bmatrix}$ con $\bar{x_i}$=$\frac{1}{n}\sum_{i=1}^{n}x_{1i}$
+
+Por otro lado, $X_1^T1$= $\begin{bmatrix} x_{11}\ x_{12}\ \cdots \ x_{147}\\ \ x_{21}\ x_{22}\ \cdots\ x_{247}\end{bmatrix} \begin{bmatrix} 1 \\ \vdots \\ 1\end{bmatrix}$=$\begin{bmatrix} \sum_{i=1}^{n}x_{1i}\\  \sum_{i=1}^{n}x_{2i}\end{bmatrix}$=$\begin{bmatrix} 110-9\\ 432.5\end{bmatrix}$. Por lo tanto, el vector de medias es: $\bar{x_1}=$X_1^T1$=
+$\begin{bmatrix} 2.36\\ 9.2\end{bmatrix}$
+
+```{r}
+a<-c(110.9, 432.5) #x^t1
+(vec_med<-a/47)
+```
+
+
+Sabemos que S (matriz de varianzas y covarianzas) se escribe como $S= \frac{1}{n} \Sigma$ con $\Sigma=A^TA$ y $A=X-11^TX$ donde $X$ es una mátriz de tamaño nxp que contiene las observaciones y $1$ es un vector de unos de tamaño nxp.
+En este caso tenemos $n=47$. Si desarrolamos, $\Sigma=X^TX-\frac{2}{n}(X^T1)(X^T1)^T+\frac{1}{n^2}(X^T1)1^T1(X^T1)^T$. Ya tenemos los resultados de $X^TX$ y de $X^T1$. Calculamos entonces la S:
+
+```{r}
+xtx<-matrix(c(265.12, 1029.62, 1029.62,4069.71),nrow=2,byrow=T)
+uno<-c(rep(1, 47))
+a<-c(110.9, 432.5) #x^t1
+```
+
+```{r}
+sigma<-xtx-(2/47)*a %*% t(a)+(1/47)**2*a%*%t(uno)%*%uno%*%t(a)
+```
+
+```{r}
+(s=(1/47)*sigma)
+```
+
+b) Procedemos como en el ejercicio anterior:
+
+```{r}
+a_2<-c(110.9, 432.5)#x^t1
+(vec_med_2<-a_2/97)
+```
+
+
+```{r}
+xtx_2<-matrix(c(836.75, 3275.55, 3275.55, 13056.17),nrow=2,byrow=T)
+uno_2<-c(rep(1, 97))
+```
+
+```{r}
+sigma_2<-xtx_2-(2/97)*a_2 %*% t(a_2)+(1/97)**2*a_2%*%t(uno_2)%*%uno_2%*%t(a_2)
+```
+
+```{r}
+(s_2=(1/97)*sigma_2)
+```
+
+c) Considerando los 144 gatos calcularemos lo anterior. Sea Y la matriz de $144x2$ que contiene las observaciones de todos los gatos. Ahora, notemos que Y no es más que $Y=\begin{bmatrix} X_1 \\ X_2\end{bmatrix} $. Con $X_i$ la matriz para hembras o machos, según el �?ndice. Entonces ya tenemos todo lo necesario.
+
+Primero el vector de medias:
+
+```{r}
+(vec_med_tot<-(a+a_2)/144)
+```
+
+
+Ahora la matriz de covarianzas será $S= \frac{1}{n} \Sigma$ con $\Sigma=X_1^TX_1+X_2^tX_2-\frac{2}{n}([X_1^T1+X_2^T1])([X_1^T1+X_2^T1]^T1)^T+\frac{1}{n^2}([X_1^T1+X_2^T1]^T1)1^T1([X_1^T1+X_2^T1]^T1)^T$
+
+```{r}
+uno_t<-c(rep(1, 144))
+sigma_t<-xtx+xtx_2-(2/144)*(a+a_2) %*% (t(a)+t(a_2))+(1/144)**2*(a+a_2)%*%t(uno_t)%*%uno_t%*%(t(a)+t(a_2))
+```
+
+```{r}
+(s_t=(1/144)*sigma_t)
+```
+
+d) Encontremos el coeficiente de correlación para los datos anteriores. Primero, sabemos que la matriz de correlaciones $R$ está dada por $R=D^{-\frac{1}{2}}SD^{-\frac{1}{2}}$ con $D$ la matriz con la diagonal igual
+
+```{r}
+"%^%" <- function(x, n) 
+	with(eigen(x), vectors %*% (values^n * t(vectors)))
+Dh<- diag(diag(s))
+Dh<-Dh %^% (-0.5)
+(R_h<-Dh%*%s%*%Dh)
+```
+
+```{r}
+Dm<- diag(diag(s_2))
+Dm<-Dm %^% (-0.5)
+(Rm<-Dm%*%s_2%*%Dm)
+```
+
+```{r}
+Dt<- diag(diag(s_t))
+Dt<-Dt %^% (-0.5)
+(Rt<-Dt%*%s_t%*%Dt)
+```
+
+
+
